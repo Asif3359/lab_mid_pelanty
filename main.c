@@ -280,6 +280,64 @@ void quickSort()
     printarray(array,n);
     close();
 }
+int getMax(int array[], int n) {
+    int max = array[0];
+    for (int i = 1; i < n; i++) {
+        if (array[i] > max) {
+            max = array[i];
+        }
+    }
+    return max;
+}
+void countingSort(int array[], int n, int exp) {
+    int output[n];
+    int count[10] = {0};
+
+    // Count the occurrences of each digit at the current place value
+    for (int i = 0; i < n; i++) {
+        count[(array[i] / exp) % 10]++;
+    }
+
+    // Adjust the count array to indicate the position of each digit in the output array
+    for (int i = 1; i < 10; i++) {
+        count[i] += count[i - 1];
+    }
+
+    // Build the output array
+    for (int i = n - 1; i >= 0; i--) {
+        output[count[(array[i] / exp) % 10] - 1] = array[i];
+        count[(array[i] / exp) % 10]--;
+    }
+
+    // Copy the output array back to the original array
+    for (int i = 0; i < n; i++) {
+        array[i] = output[i];
+    }
+}
+void radixSort()
+{
+    printf("\n\t\tRadix Sort \n");
+    int array[Max_Size];
+    int n;
+    printf("\n\tEnter the Size of your array:");
+    scanf("%d",&n);
+
+    printf("\nEnter Your unsorted Number :\n");
+    for(int i=0 ; i<n ; i++)
+    {
+        scanf("\t\t%d",&array[i]);
+    }
+	int m = getMax(array, n);
+
+	for (int exp = 1; m/exp > 0; exp *= 10){
+        countingSort(array, n, exp);
+	}
+
+    printf("\n\tYour sorted Array :");
+    printarray(array,n);
+    close();
+
+}
 
 
 int main()
@@ -291,7 +349,7 @@ int main()
     printf("\n \t 3. Insertion Sort");
     printf("\n \t 4. Marge Sort");
     printf("\n \t 5. Quick Sort");
-    printf("\n \t 6. Insertion Sort");
+    printf("\n \t 6. Radix Sort");
     printf("\n \t 7. Insertion Sort");
     printf("\n\n\t Enter a number to select any Sorting Algorithom :");
     scanf("%d",&input);
@@ -322,7 +380,7 @@ int main()
             break;
         case 6:
             system("cls");
-            printf("6");
+            radixSort();
             break;
         case 7:
             system("cls");
