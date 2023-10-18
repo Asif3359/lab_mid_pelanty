@@ -40,13 +40,11 @@ void close()
 }
 void merge(int array[], int low, int mid, int high) {
     int i, j, k;
-    int n1 = mid - low + 1; // Size of the left subarray
-    int n2 = high - mid;     // Size of the right subarray
+    int n1 = mid - low + 1;
+    int n2 = high - mid;
 
-    // Create temporary arrays to hold the data
     int L[n1], R[n2];
 
-    // Copy data from the original array to the temporary arrays
     for (i = 0; i < n1; i++) {
         L[i] = array[low + i];
     }
@@ -54,10 +52,10 @@ void merge(int array[], int low, int mid, int high) {
         R[j] = array[mid + 1 + j];
     }
 
-    // Merge the two subarrays back into the original array
-    i = 0; // Initial index of the left subarray
-    j = 0; // Initial index of the right subarray
-    k = low; // Initial index of the merged subarray
+
+    i = 0;
+    j = 0;
+    k = low;
 
     while (i < n1 && j < n2) {
         if (L[i] <= R[j]) {
@@ -70,7 +68,7 @@ void merge(int array[], int low, int mid, int high) {
         k++;
     }
 
-    // Copy any remaining elements from L[] and R[] if there are any
+
     while (i < n1) {
         array[k] = L[i];
         i++;
@@ -85,33 +83,25 @@ void merge(int array[], int low, int mid, int high) {
 void mergeSortSub(int array[], int low , int high)
 {
     if (low < high) {
-        // Same as (l+r)/2, but avoids
-        // overflow for large l and h
+
         int mid = low + (high - low) / 2;
 
-        // Sort first and second halves
         mergeSortSub(array, low, mid);
         mergeSortSub(array, mid + 1, high);
 
         merge(array, low, mid, high);
     }
 }
-//partition
+
 int partition(int array[], int low, int high)
 {
-    // Choosing the pivot
     int pivot = array[high];
 
-    // Index of smaller element and indicates
-    // the right position of pivot found so far
     int i = (low - 1);
 
     for (int j = low; j <= high - 1; j++) {
-
-        // If current element is smaller than the pivot
         if (array[j] < pivot) {
 
-            // Increment index of smaller element
             i++;
             swap(&array[i], &array[j]);
         }
@@ -122,13 +112,8 @@ int partition(int array[], int low, int high)
 void quickSortSub(int array[], int low, int high)
 {
     if (low < high) {
-
-        // pi is partitioning index, arr[p]
-        // is now at right place
         int pi = partition(array, low, high);
 
-        // Separately sort elements before
-        // partition and after partition
         quickSortSub(array, low, pi - 1);
         quickSortSub(array, pi + 1, high);
     }
@@ -293,23 +278,19 @@ void countingSort(int array[], int n, int exp) {
     int output[n];
     int count[10] = {0};
 
-    // Count the occurrences of each digit at the current place value
     for (int i = 0; i < n; i++) {
         count[(array[i] / exp) % 10]++;
     }
 
-    // Adjust the count array to indicate the position of each digit in the output array
     for (int i = 1; i < 10; i++) {
         count[i] += count[i - 1];
     }
 
-    // Build the output array
     for (int i = n - 1; i >= 0; i--) {
         output[count[(array[i] / exp) % 10] - 1] = array[i];
         count[(array[i] / exp) % 10]--;
     }
 
-    // Copy the output array back to the original array
     for (int i = 0; i < n; i++) {
         array[i] = output[i];
     }
@@ -338,6 +319,56 @@ void radixSort()
     close();
 
 }
+void heapify(int array[], int n, int i) {
+    int largest = i;
+    int left = 2 * i + 1;
+    int right = 2 * i + 2;
+
+    if (left < n && array[left] > array[largest])
+      {
+          largest = left;
+      }
+
+    if (right < n && array[right] > array[largest])
+      {
+          largest = right;
+      }
+
+    if (largest != i) {
+      swap(&array[i], &array[largest]);
+      heapify(array, n, largest);
+    }
+  }
+void heapSort()
+{
+    printf("\n\t\tHeap Sort \n");
+    int array[Max_Size];
+    int n;
+    printf("\n\tEnter the Size of your array:");
+    scanf("%d",&n);
+
+    printf("\nEnter Your unsorted Number :\n");
+    for(int i=0 ; i<n ; i++)
+    {
+        scanf("\t\t%d",&array[i]);
+    }
+
+
+	for (int i = n / 2 - 1; i >= 0; i--)
+    {
+        heapify(array, n, i);
+    }
+    for (int i = n - 1; i >= 0; i--)
+    {
+      swap(&array[0], &array[i]);
+      heapify(array, i, 0);
+    }
+
+    printf("\n\tYour sorted Array :");
+    printarray(array,n);
+    close();
+
+}
 
 
 int main()
@@ -350,7 +381,7 @@ int main()
     printf("\n \t 4. Marge Sort");
     printf("\n \t 5. Quick Sort");
     printf("\n \t 6. Radix Sort");
-    printf("\n \t 7. Insertion Sort");
+    printf("\n \t 7. Heap Sort");
     printf("\n\n\t Enter a number to select any Sorting Algorithom :");
     scanf("%d",&input);
     switch(input)
@@ -384,7 +415,7 @@ int main()
             break;
         case 7:
             system("cls");
-            printf("7");
+            heapSort();
             break;
         default:
             system("cls");
